@@ -1,6 +1,8 @@
 # ACS_Project_MPZ
 Authors (team): <mark><a href="https://github.com/Bohdan213">Пелех Богдан</a>, <a href="https://github.com/maxmyk">Михасюта Максим</a>, <a href="https://github.com/fazhur">Журба Федір</a></mark><br>
 
+![alt text](https://github.com/maxmyk/ACS_Project_MPZ/blob/main/media/circuit.png?raw=true)
+
 # Description
 
 It is the first iteration. Only basic stuff was implemented
