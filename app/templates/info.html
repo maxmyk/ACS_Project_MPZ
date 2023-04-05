@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../static/index.js" defer></script>
+    <title>Info</title>
+</head>
+<body>
+    <h1>HUB INFO PAGE</h1>
+    <h3>HUB id: {{ id }}</h3>
+    <script>
+        const id = {{ id }};
+    </script>
+
+    <section>
+        <p>
+            <span>Temperature: </span>
+            <span id="temperature-element"></span>
+        </p>
+    </section>
+
+    <section>
+        <p>
+            <span>Volume: </span>
+            <span id="volume-element"></span>
+        </p>
+    </section>
+
+    <section>
+        <p>
+            <span>Humidity: </span>
+            <span id="humidity-element"></span>
+        </p>
+    </section>
+</body>
+</html>
