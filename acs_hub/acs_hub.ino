@@ -1,40 +1,28 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-//#include "DHT.h"
+#include "DHT.h"
 #include <WiFiClient.h>
 #include <Wire.h>
+#include "WIFI_PASS.h"
 
-//#define DHTPIN D1
-//#define DHTTYPE DHT11
-//DHT dht(DHTPIN, DHTTYPE);
+#define DHTPIN 4
+#define DHTTYPE DHT11
+DHT dht(DHTPIN, DHTTYPE);
 int humidity, temperature;
 
-const char* ssid = "iPhone 13 Pro Max";
-const char* password = "12312312345";
+const char* host = "http://192.168.43.182:8080/";
+const char* path = "http://192.168.43.182:8080/api/v1/collect_data";
 
-const char* host = "http://172.20.10.2:8080/";
-const char* path = "http://172.20.10.2:8080/api/v1/collect_data";
-
-
-//String readTmp() {
-//  return String(dht.readTemperature());
-//}
-//
-//String readHum() {
-//  return String(dht.readHumidity());
-//}
-
-String readTmp() {
-  return String(analogRead(A0));
+int readTmp() {
+  return dht.readTemperature();
 }
 
-String readHum() {
-  return String(digitalRead(D1));
+int readHum() {
+  return dht.readHumidity();
 }
-
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   Serial.println("Booting");
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -48,19 +36,17 @@ void setup() {
   Serial.println(WiFi.localIP());
 }
 
-// data = {
-//        "id": id, // we will use EEPROM to store unique ID
-//        "temperature": readTmp(),
-//        "volume": readTmp(),
-//        "humidity": readHum(),
-//    }
-
 void sendJson() {
   WiFiClient client;
   HTTPClient http;
   http.begin(client, path);
   http.addHeader("Content-Type", "application/json");
-  String json = "{\"id\": 1, \"temperature\": " + readTmp() + ", \"volume\": " + readTmp() + ", \"humidity\": " + readHum() + "}";
+  int tmp = readTmp(), hum = readHum();
+  if(isnan(tmp) && isnan(hum)){
+    tmp = 0;
+    hum = 0;
+  }
+  String json = "{\"id\": 2, \"temperature\": " + String(tmp) + ", \"volume\": " + String(tmp) + ", \"humidity\": " + String(hum) + "}";
   Serial.println(json);
   int httpCode = http.POST(json);
   String payload = http.getString();
@@ -72,5 +58,5 @@ void sendJson() {
 
 void loop() {
   sendJson();
-  delay(5000);
+  delay(2500);
 }

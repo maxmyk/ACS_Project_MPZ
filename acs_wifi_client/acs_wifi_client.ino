@@ -14,7 +14,7 @@ const char* serverNameIndex = "http://192.168.4.1/";
 #include <Wire.h>
 
 unsigned long previousMillis = 0;
-const long interval = 5000; 
+const long interval = 5000;
 
 void setup() {
   Serial.begin(115200);
