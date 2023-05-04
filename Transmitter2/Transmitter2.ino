@@ -11,7 +11,7 @@
 
 RF24 radio(9, 10);
 uint8_t address[][6] = { "HNode", "1Node", "2Node" };
-int radioNumber = 1;
+int radioNumber = 2;
 bool role = true;
 float payload = 0.0;
 #define DHTPIN 2
@@ -21,12 +21,15 @@ DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
     Serial.begin(115200);
+    while (!Serial) {
+        ; // wait for serial port to connect. Needed for native USB port only
+    }
     if (!radio.begin()) {
         Serial.println(F("radio hardware is not responding!!"));
         while (1) {}
     }
     Serial.print(F("radioNumber = "));
-    Serial.println((int)radioNumber);
+    Serial.println(radioNumber);
     radio.setPALevel(RF24_PA_LOW);
     radio.setPayloadSize(sizeof(payload));
     radio.openWritingPipe(address[radioNumber]);
@@ -53,7 +56,7 @@ void loop() {
         Serial.print(end_timer - start_timer);
         Serial.print(F(" us. Sent: "));
         Serial.println(payload);
-        payload = dht.readTemperature();
+        payload = dht.readHumidity();
     } else {
         Serial.println(F("Transmission failed or timed out"));
     }
