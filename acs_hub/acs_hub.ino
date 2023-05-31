@@ -3,24 +3,12 @@
 #include <WiFiClient.h>
 #include <Wire.h>
 #include "WIFI_PASS.h"
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
-#include <Wire.h>
 
-const char* host = "http://192.168.43.182:8080/";
-const char* path = "http://192.168.43.182:8080/api/v1/collect_data";
+const char* host = "http://10.10.246.182:8080/";
+const char* path = "http://10.10.246.182:8080/api/v1/collect_data";
 
 int tmp = 0;
 int hum = 0;
-
-int readTmp() {
-    return Serial.read();
-}
-
-int readHum() {
-    return Serial.read();
-}
 
 void setup() {
     Serial.begin(115200);
@@ -33,9 +21,6 @@ void setup() {
         ESP.restart();
     }
     Serial.println("Ready");
-    while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
-    }
     Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
 }
@@ -46,7 +31,7 @@ void sendJson(int tmp, int hum) {
     http.begin(client, path);
     http.addHeader("Content-Type", "application/json");
 
-    String json = "{\"id\": 2, \"temperature\": " + String(tmp) + ", \"humidity\": " + String(hum) + "}";
+    String json = "{\"id\": 0, \"temperature\": " + String(tmp) + ", \"humidity\": " + String(hum) + "}";
     Serial.println(json);
     int httpCode = http.POST(json);
     String payload = http.getString();
@@ -59,10 +44,6 @@ void sendJson(int tmp, int hum) {
 }
 
 void loop() {
-
-}
-
-void serialEvent() {
     if (Serial.available())
     {
         String str = Serial.readString();
