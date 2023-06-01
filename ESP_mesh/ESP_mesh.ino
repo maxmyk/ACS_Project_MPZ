@@ -9,11 +9,13 @@
 #define   MESH_PASSWORD   "12345678"
 #define   MESH_PORT       5555
 
+#define defaultPayloadSize 24
+
 RF24 radio(2, 4);
 uint8_t address[][6] = { "0Node", "1Node", "2Node", "3Node" };
 int radioNumber = 0;
 bool role = false;
-float payload = 0.0;
+char* payload = "id:1;D:27.50,37.00;";
 String data = "";
 
 Scheduler userScheduler;
@@ -53,7 +55,7 @@ void setup() {
   mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
 //  mesh.setDebugMsgTypes( ERROR | STARTUP );
 
-  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
+  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);  
   mesh.onReceive(&receivedCallback);
   mesh.onNewConnection(&newConnectionCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
@@ -69,12 +71,12 @@ void setup() {
   Serial.print(F("radioNumber = "));
   Serial.println((int)radioNumber);
   radio.setPALevel(RF24_PA_MAX);
-  radio.setPayloadSize(sizeof(payload));
+  radio.setPayloadSize(defaultPayloadSize);
   
   radio.openReadingPipe(1, address[1]);
   radio.openReadingPipe(2, address[2]);
   radio.openReadingPipe(3, address[3]);
-  
+
   radio.startListening();
   printf_begin();             // needed only once for printing details
   //   radio.printDetails();       // (smaller) function that prints raw register values
@@ -86,7 +88,7 @@ void loop() {
   uint8_t pipe;
   if (radio.available(&pipe)) {                // is there a payload? get the pipe number that recieved it
       uint8_t bytes = radio.getPayloadSize();  // get the size of the payload
-      radio.read(&payload, bytes);             // fetch payload from FIFO
+      radio.read(payload, bytes);             // fetch payload from FIFO
       Serial.print(F("Received "));
       Serial.print(bytes);  // print the size of the payload
       Serial.print(F(" bytes on pipe "));
