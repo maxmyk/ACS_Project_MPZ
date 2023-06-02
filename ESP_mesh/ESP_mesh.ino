@@ -8,15 +8,17 @@
 #define   MESH_PREFIX     "HUB_TEST"
 #define   MESH_PASSWORD   "12345678"
 #define   MESH_PORT       5555
-
 #define defaultPayloadSize 24
 
 RF24 radio(2, 4);
 uint8_t address[][6] = { "0Node", "1Node", "2Node", "3Node" };
 int radioNumber = 0;
 bool role = false;
-char* payload = "id:1;D:27.50,37.00;";
+char payload[] = "........................";
 String data = "";
+
+String dataA = "";
+String dataB = "";
 
 Scheduler userScheduler;
 painlessMesh  mesh;
@@ -26,9 +28,10 @@ void sendMessage() ;
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  String msg = "Hello from node MAX ";
+  String msg = "Hello from node BODIA ";
   msg += mesh.getNodeId();
-  msg += data;
+  msg += dataA;
+  msg += dataB;
   mesh.sendBroadcast( msg );
   taskSendMessage.setInterval( random( TASK_SECOND * 1, TASK_SECOND * 5 ));
 }
@@ -52,10 +55,10 @@ void nodeTimeAdjustedCallback(int32_t offset) {
 void setup() {
   Serial.begin(115200);
 
-  mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
-//  mesh.setDebugMsgTypes( ERROR | STARTUP );
+//  mesh.setDebugMsgTypes( ERROR | MESH_STATUS | CONNECTION | SYNC | COMMUNICATION | GENERAL | MSG_TYPES | REMOTE ); // all types on
+  mesh.setDebugMsgTypes( ERROR | STARTUP );
 
-  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT);  
+  mesh.init( MESH_PREFIX, MESH_PASSWORD, &userScheduler, MESH_PORT );
   mesh.onReceive(&receivedCallback);
   mesh.onNewConnection(&newConnectionCallback);
   mesh.onChangedConnections(&changedConnectionCallback);
@@ -76,7 +79,7 @@ void setup() {
   radio.openReadingPipe(1, address[1]);
   radio.openReadingPipe(2, address[2]);
   radio.openReadingPipe(3, address[3]);
-
+  
   radio.startListening();
   printf_begin();             // needed only once for printing details
   //   radio.printDetails();       // (smaller) function that prints raw register values
@@ -95,7 +98,13 @@ void loop() {
       Serial.print(pipe);  // print the pipe number
       Serial.print(F(": "));
       Serial.println(payload);  // print the payload's value
-      data = String(pipe) + String(" ") + String(payload);
+//      data = String(pipe) + String(" ") + String(payload);
+      if (pipe == 1){
+        dataA = String(payload);
+      }
+      else{
+        dataB = String(payload);
+      }
   }
   mesh.update();
 }
