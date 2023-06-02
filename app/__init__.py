@@ -1,6 +1,6 @@
 from flask import Flask
-from app.connection import ConnectionDB
+from app.container import Container
 
 app = Flask(__name__)
 
-container = ConnectionDB()
+container = Container()

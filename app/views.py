@@ -6,7 +6,7 @@ from app import app
 # def login():
 #     return render_template('login.html')
 
-@app.route('/<int:hubId>')
-def info(hubId):
+@app.route('/<int:hubId>/<int:sensorId>')
+def info(hubId, sensorId):
     # return jsonify(container.getAllValues(hubId))
-    return render_template('info.html', id=hubId)
+    return render_template('info.html', hubId=hubId, sensorId=sensorId)

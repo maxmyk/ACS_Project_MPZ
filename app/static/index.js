@@ -1,5 +1,5 @@
 function showTemperature(temperatureString) {
-  show("temperature-element", temperatureString);
+  show("temperature-element1", temperatureString);
 }
 
 //function showVolume(volumeString) {
@@ -7,8 +7,9 @@ function showTemperature(temperatureString) {
 //}
 
 function showHumidity(humidityString) {
-  show("humidity-element", humidityString);
+  show("humidity-element1", humidityString);
 }
+
 
 function show(id, text) {
   const element = document.getElementById(id);
@@ -19,13 +20,12 @@ function show(id, text) {
 
 setInterval(async function () {
 //    const url = `http://192.168.43.182:8080/api/v1/get_data/${id}`;
-    const url = `http://127.0.0.1:8080/api/v1/get_data/${id}`
+    const url = `http://192.168.1.103:8080/api/v1/get_data/${hubId}/${sensorId}`
     const response = await fetch(url);
     const data = await response.json();
-    temperature = await data["temperature"];
-//    volume = await data["volume"]
-    humidity = await data["humidity"]
-    showTemperature(data["temperature"])
-//    showVolume(data["volume"])
-    showHumidity(data["humidity"])
+
+    temperature1 = await data["temperature"];
+    humidity1 = await data["humidity"]
+    showTemperature(temperature1)
+    showHumidity(humidity1)
 }, 1000);

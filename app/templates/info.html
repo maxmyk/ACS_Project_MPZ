@@ -58,15 +58,17 @@
 </head>
 <body>
     <script>
-        const id = {{ id }};
+        const hubId = {{ hubId }};
+        const sensorId = {{ sensorId }};
     </script>
     <header>
         <h1>HUB INFO PAGE</h1>
     </header>
     <section>
-        <p>HUB id: {{ id }}</p>
-        <p>Temperature: <span id="temperature-element"></span></p>
-        <p>Humidity: <span id="humidity-element"></span></p>
+        <p>HUB id: {{ hubId }}</p>
+        <p>Sensor id: {{ sensorId }}</p>
+        <p>Temperature1: <span id="temperature-element1"></span></p>
+        <p>Humidity1: <span id="humidity-element1"></span></p>
     </section>
 </body>
 </html>
