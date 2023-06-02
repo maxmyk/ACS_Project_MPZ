@@ -28,8 +28,7 @@ void sendMessage() ;
 Task taskSendMessage( TASK_SECOND * 1 , TASK_FOREVER, &sendMessage );
 
 void sendMessage() {
-  String msg = "Hello from node BODIA ";
-  msg += mesh.getNodeId();
+  String msg = "";
   msg += dataA;
   msg += dataB;
   mesh.sendBroadcast( msg );
